@@ -93,7 +93,7 @@ function submit(): void {
 <template>
     <Head title="Company setup" />
 
-    <main class="min-h-dvh bg-[#f8f7fb]">
+    <main class="min-h-dvh bg-background text-foreground">
         <div
             class="mx-auto flex min-h-dvh w-full max-w-6xl flex-col px-4 py-6 sm:px-6 lg:px-8"
         >
@@ -116,9 +116,12 @@ function submit(): void {
                     </div>
                 </div>
                 <div
-                    class="hidden items-center gap-2 rounded-full border bg-white px-3 py-1.5 text-sm text-muted-foreground shadow-sm sm:flex"
+                    class="hidden items-center gap-2 rounded-full border bg-card px-3 py-1.5 text-sm text-muted-foreground shadow-sm sm:flex"
                 >
-                    <CheckCircle2 class="size-4 text-emerald-600" />
+                    <CheckCircle2
+                        class="size-4 text-emerald-600"
+                        aria-hidden="true"
+                    />
                     {{ completedSections }}/3 sections ready
                 </div>
             </header>
@@ -164,7 +167,7 @@ function submit(): void {
                                     id="industry"
                                     v-model="form.industry"
                                     required
-                                    placeholder="Software, BPO, education..."
+                                    placeholder="Software, BPO, education…"
                                 />
                                 <InputError :message="form.errors.industry" />
                             </div>
@@ -393,7 +396,7 @@ function submit(): void {
                         </CardHeader>
                         <CardContent class="space-y-4">
                             <div
-                                class="flex aspect-square items-center justify-center overflow-hidden rounded-lg border border-dashed bg-white"
+                                class="flex aspect-square items-center justify-center overflow-hidden rounded-lg border border-dashed bg-background"
                             >
                                 <img
                                     v-if="logoPreview"
@@ -405,7 +408,10 @@ function submit(): void {
                                     v-else
                                     class="flex flex-col items-center gap-3 text-muted-foreground"
                                 >
-                                    <ImagePlus class="size-8" />
+                                    <ImagePlus
+                                        class="size-8"
+                                        aria-hidden="true"
+                                    />
                                     <span class="text-sm"
                                         >PNG, JPG, WebP or SVG</span
                                     >
@@ -413,7 +419,7 @@ function submit(): void {
                             </div>
                             <Label
                                 for="logo"
-                                class="flex cursor-pointer items-center justify-center rounded-md border bg-white px-3 py-2 text-sm font-medium shadow-sm transition hover:bg-muted"
+                                class="flex cursor-pointer items-center justify-center rounded-md border bg-background px-3 py-2 text-sm font-medium shadow-sm transition-[background-color,color,border-color] hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/50"
                             >
                                 Upload logo
                             </Label>

@@ -1,5 +1,5 @@
 import type { ComputedRef, Ref } from 'vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import type { Appearance, ResolvedAppearance } from '@/types';
 
 export type { Appearance, ResolvedAppearance };
@@ -15,19 +15,27 @@ export function updateTheme(value: Appearance): void {
         return;
     }
 
+    let resolvedTheme: ResolvedAppearance;
+
     if (value === 'system') {
         const mediaQueryList = window.matchMedia(
             '(prefers-color-scheme: dark)',
         );
-        const systemTheme = mediaQueryList.matches ? 'dark' : 'light';
+        resolvedTheme = mediaQueryList.matches ? 'dark' : 'light';
 
         document.documentElement.classList.toggle(
             'dark',
-            systemTheme === 'dark',
+            resolvedTheme === 'dark',
         );
     } else {
-        document.documentElement.classList.toggle('dark', value === 'dark');
+        resolvedTheme = value;
+        document.documentElement.classList.toggle(
+            'dark',
+            resolvedTheme === 'dark',
+        );
     }
+
+    document.documentElement.style.colorScheme = resolvedTheme;
 }
 
 const setCookie = (name: string, value: string, days = 365) => {
@@ -53,7 +61,23 @@ const getStoredAppearance = () => {
         return null;
     }
 
-    return localStorage.getItem('appearance') as Appearance | null;
+    try {
+        return window.localStorage?.getItem('appearance') as Appearance | null;
+    } catch {
+        return null;
+    }
+};
+
+const storeAppearance = (value: Appearance) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+
+    try {
+        window.localStorage?.setItem('appearance', value);
+    } catch {
+        // Some browser contexts can restrict localStorage; cookies still keep SSR in sync.
+    }
 };
 
 const prefersDark = (): boolean => {
@@ -84,21 +108,32 @@ export function initializeTheme(): void {
 }
 
 const appearance = ref<Appearance>('system');
+const systemPrefersDark = ref(false);
 
 export function useAppearance(): UseAppearanceReturn {
+    const syncSystemPreference = () => {
+        systemPrefersDark.value = prefersDark();
+    };
+
     onMounted(() => {
-        const savedAppearance = localStorage.getItem(
-            'appearance',
-        ) as Appearance | null;
+        const savedAppearance = getStoredAppearance();
+
+        syncSystemPreference();
 
         if (savedAppearance) {
             appearance.value = savedAppearance;
         }
+
+        mediaQuery()?.addEventListener('change', syncSystemPreference);
+    });
+
+    onUnmounted(() => {
+        mediaQuery()?.removeEventListener('change', syncSystemPreference);
     });
 
     const resolvedAppearance = computed<ResolvedAppearance>(() => {
         if (appearance.value === 'system') {
-            return prefersDark() ? 'dark' : 'light';
+            return systemPrefersDark.value ? 'dark' : 'light';
         }
 
         return appearance.value;
@@ -107,13 +142,13 @@ export function useAppearance(): UseAppearanceReturn {
     function updateAppearance(value: Appearance) {
         appearance.value = value;
 
+        updateTheme(value);
+
         // Store in localStorage for client-side persistence...
-        localStorage.setItem('appearance', value);
+        storeAppearance(value);
 
         // Store in cookie for SSR...
         setCookie('appearance', value);
-
-        updateTheme(value);
     }
 
     return {

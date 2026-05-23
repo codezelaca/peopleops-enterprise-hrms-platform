@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { LayoutGrid, Menu, Search } from 'lucide-vue-next';
 import { computed } from 'vue';
+import AppearanceMenu from '@/components/AppearanceMenu.vue';
 import AppLogo from '@/components/AppLogo.vue';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
@@ -79,8 +80,9 @@ const rightNavItems: NavItem[] = [];
                                 variant="ghost"
                                 size="icon"
                                 class="mr-2 h-9 w-9"
+                                aria-label="Open navigation menu"
                             >
-                                <Menu class="h-5 w-5" />
+                                <Menu class="h-5 w-5" aria-hidden="true" />
                             </Button>
                         </SheetTrigger>
                         <SheetContent side="left" class="w-[300px] p-6">
@@ -89,7 +91,7 @@ const rightNavItems: NavItem[] = [];
                             >
                             <SheetHeader class="flex justify-start text-left">
                                 <AppLogoIcon
-                                    class="size-6 fill-current text-black dark:text-white"
+                                    class="size-6 fill-current text-foreground"
                                 />
                             </SheetHeader>
                             <div
@@ -173,7 +175,7 @@ const rightNavItems: NavItem[] = [];
                                 </Link>
                                 <div
                                     v-if="isCurrentUrl(item.href)"
-                                    class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"
+                                    class="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-primary"
                                 ></div>
                             </NavigationMenuItem>
                         </NavigationMenuList>
@@ -186,9 +188,11 @@ const rightNavItems: NavItem[] = [];
                             variant="ghost"
                             size="icon"
                             class="group h-9 w-9 cursor-pointer"
+                            aria-label="Search"
                         >
                             <Search
                                 class="size-5 opacity-80 group-hover:opacity-100"
+                                aria-hidden="true"
                             />
                         </Button>
 
@@ -230,6 +234,8 @@ const rightNavItems: NavItem[] = [];
                         </div>
                     </div>
 
+                    <AppearanceMenu />
+
                     <DropdownMenu>
                         <DropdownMenuTrigger :as-child="true">
                             <Button
@@ -246,7 +252,7 @@ const rightNavItems: NavItem[] = [];
                                         :alt="auth.user.name"
                                     />
                                     <AvatarFallback
-                                        class="rounded-lg bg-neutral-200 font-semibold text-black dark:bg-neutral-700 dark:text-white"
+                                        class="rounded-lg bg-muted font-semibold text-foreground"
                                     >
                                         {{ getInitials(auth.user?.name) }}
                                     </AvatarFallback>

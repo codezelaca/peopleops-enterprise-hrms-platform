@@ -17,7 +17,7 @@ const page = usePage();
         />
         <AppLogoIcon
             v-else
-            class="size-5 fill-current text-white dark:text-black"
+            class="size-5 fill-current text-primary-foreground"
         />
     </div>
     <div class="ml-1 grid flex-1 text-left text-sm">

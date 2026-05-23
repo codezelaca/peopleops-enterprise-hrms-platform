@@ -81,6 +81,16 @@ npm run dev
 php artisan serve
 ```
 
+### Local Demo Access
+
+Use this local/demo administrator account after the demo database has been prepared:
+
+- **URL:** `/login`
+- **Email:** `admin@peopleops.local`
+- **Password:** `PeopleOpsAdmin#2026`
+
+This credential is for local development and demo verification only. Do not reuse it for production, staging, shared Neon databases, or any customer data environment.
+
 When queues, realtime, and scheduled jobs are needed locally, run:
 
 ```bash

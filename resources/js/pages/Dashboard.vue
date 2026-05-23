@@ -60,11 +60,11 @@ defineOptions({
 
     <div class="flex h-full flex-1 flex-col gap-6 overflow-x-auto p-4 sm:p-6">
         <section
-            class="flex flex-col gap-4 rounded-lg border bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between"
+            class="flex flex-col gap-4 rounded-lg border bg-card p-5 text-card-foreground shadow-sm sm:flex-row sm:items-center sm:justify-between"
         >
-            <div class="flex items-start gap-4">
+            <div class="flex min-w-0 items-start gap-4">
                 <div
-                    class="flex size-12 items-center justify-center overflow-hidden rounded-lg bg-primary text-primary-foreground"
+                    class="flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-primary text-primary-foreground"
                 >
                     <img
                         v-if="company.logoUrl"
@@ -90,9 +90,9 @@ defineOptions({
                 </div>
             </div>
             <div
-                class="flex items-center gap-2 rounded-md border bg-muted/40 px-3 py-2 text-sm text-muted-foreground"
+                class="flex items-center gap-2 rounded-md border bg-muted/60 px-3 py-2 text-sm text-muted-foreground dark:bg-muted/40"
             >
-                <ShieldCheck class="size-4 text-primary" />
+                <ShieldCheck class="size-4 text-primary" aria-hidden="true" />
                 Admin workspace
             </div>
         </section>
@@ -133,9 +133,11 @@ defineOptions({
                             'Reports',
                         ]"
                         :key="module"
-                        class="flex items-center justify-between rounded-md border bg-muted/20 px-3 py-2"
+                        class="flex min-w-0 items-center justify-between gap-3 rounded-md border bg-background px-3 py-2 text-foreground shadow-xs dark:bg-muted/30"
                     >
-                        <span class="text-sm font-medium">{{ module }}</span>
+                        <span class="min-w-0 truncate text-sm font-medium">{{
+                            module
+                        }}</span>
                         <Badge variant="outline">Setup pending</Badge>
                     </div>
                 </CardContent>
@@ -153,14 +155,21 @@ defineOptions({
                     <div
                         v-for="item in setupChecklist"
                         :key="item.label"
-                        class="flex items-center gap-3 rounded-md border bg-white px-3 py-2"
+                        class="flex items-center gap-3 rounded-md border bg-background px-3 py-2 text-foreground shadow-xs dark:bg-muted/30"
                     >
                         <BadgeCheck
                             v-if="item.complete"
                             class="size-4 text-emerald-600"
+                            aria-hidden="true"
                         />
-                        <Circle v-else class="size-4 text-muted-foreground" />
-                        <span class="text-sm">{{ item.label }}</span>
+                        <Circle
+                            v-else
+                            class="size-4 text-muted-foreground"
+                            aria-hidden="true"
+                        />
+                        <span class="min-w-0 truncate text-sm">{{
+                            item.label
+                        }}</span>
                     </div>
                 </CardContent>
             </Card>
