@@ -404,7 +404,7 @@ Sensitive events must be logged, including:
 - PHP 8.3 or newer
 - Composer
 - Node.js 22 LTS or newer
-- pnpm
+- npm
 - PostgreSQL-compatible database
 - Redis
 - Meilisearch
@@ -422,7 +422,7 @@ cd peopleops-enterprise-hrms-platform
 
 ```bash
 composer install
-pnpm install
+npm install
 ```
 
 ### Environment
@@ -446,6 +446,8 @@ Configure the environment values for:
 - Cache driver
 - Log channel
 
+The first successful `/register` request is intentionally a one-time bootstrap path. It creates the initial administrator role assignment automatically. After any user exists, public registration closes and future users must be managed from the authenticated admin user-management workflow.
+
 ### Database
 
 ```bash
@@ -454,10 +456,12 @@ php artisan migrate --seed
 
 Use the direct Neon connection for migrations and the pooled connection for normal application runtime.
 
+The seed step creates roles and permissions only. It does not create a default user, so a fresh database can still use the first-admin bootstrap flow.
+
 ### Frontend build
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 ### Laravel server
@@ -503,31 +507,32 @@ php artisan test
 ### Frontend checks
 
 ```bash
-pnpm lint
-pnpm typecheck
-pnpm format:check
+npm run lint
+npm run types:check
+npm run format:check
 ```
 
 ### Frontend build
 
 ```bash
-pnpm build
+npm run build
 ```
 
 ### Browser tests
 
 ```bash
-pnpm test:e2e
+npx playwright test
 ```
 
 ### Full quality check
 
 ```bash
 php artisan test
-pnpm lint
-pnpm typecheck
-pnpm build
-pnpm test:e2e
+./vendor/bin/pint --test
+npm run lint
+npm run types:check
+npm run build
+npx playwright test
 ```
 
 ---
@@ -558,6 +563,8 @@ Required storage rules:
 - Access files through Laravel after permission checks
 - Validate all uploads
 - Store file metadata in the database
+
+Company logos are stored on the configured private disk and served through authenticated Laravel routes. Set `FILESYSTEM_DISK=s3` with the Cloudflare R2 S3-compatible credentials when moving beyond local storage.
 - Keep document downloads auditable
 
 ### Redis
