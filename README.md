@@ -320,7 +320,6 @@ Default roles:
 
 - Super Admin
 - HR Manager
-- Recruiter
 - Department Manager
 - Finance Officer
 - Employee
@@ -619,7 +618,7 @@ Browser tests should cover the main user journeys:
 
 - HR creates an employee
 - Candidate applies for a job
-- Recruiter moves candidate through stages
+- HR manager moves candidate through stages
 - Employee requests leave
 - Manager approves leave
 - HR generates payroll

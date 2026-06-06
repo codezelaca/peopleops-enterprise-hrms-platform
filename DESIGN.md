@@ -4,7 +4,7 @@
 
 **PeopleOps** is an enterprise HRMS and Recruitment Management System for real companies, not a demo app.
 
-The interface must feel secure, calm, fast, and premium. Every screen should help HR teams, managers, recruiters, finance users, employees, and candidates complete work with minimum friction.
+The interface must feel secure, calm, fast, and premium. Every screen should help HR teams, managers, finance users, employees, and candidates complete work with minimum friction.
 
 ## Design Goals
 

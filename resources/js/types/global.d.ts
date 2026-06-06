@@ -22,6 +22,11 @@ declare module '@inertiajs/core' {
             flash: {
                 success?: string;
                 error?: string;
+                createdUserCredentials?: {
+                    name: string;
+                    email: string;
+                    password: string;
+                };
             };
             sidebarOpen: boolean;
             [key: string]: unknown;

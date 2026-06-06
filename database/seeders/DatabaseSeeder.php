@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Support\SystemPermissions;
 use App\Support\SystemRoles;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -14,17 +15,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = collect([
-            'admin.dashboard.view',
-            'company.profile.manage',
-            'users.manage',
-            'roles.manage',
-            'employees.view',
-            'recruitment.view',
-            'payroll.view',
-            'documents.view',
-            'audit.view',
-        ])->map(fn (string $permission): Permission => Permission::query()->firstOrCreate([
+        $permissions = collect(SystemPermissions::all())->map(fn (string $permission): Permission => Permission::query()->firstOrCreate([
             'name' => $permission,
             'guard_name' => 'web',
         ]));
@@ -38,7 +29,6 @@ class DatabaseSeeder extends Seeder
 
         foreach ([
             SystemRoles::HR_MANAGER,
-            SystemRoles::RECRUITER,
             SystemRoles::MANAGER,
             SystemRoles::FINANCE,
             SystemRoles::EMPLOYEE,

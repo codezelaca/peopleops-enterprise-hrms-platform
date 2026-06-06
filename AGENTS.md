@@ -10,7 +10,7 @@ Treat this repository as a real production product, not a demo, tutorial, scaffo
 
 **Product name:** PeopleOps  
 **Product type:** Enterprise HRMS + Recruitment Management Platform  
-**Primary users:** HR teams, recruiters, department managers, finance officers, employees, interviewers, candidates, administrators, auditors, and leadership teams.  
+**Primary users:** HR teams, department managers, finance officers, employees, interviewers, candidates, administrators, auditors, and leadership teams.  
 **Business purpose:** Manage the full employee and recruitment lifecycle from workforce setup, hiring, candidate management, onboarding, attendance, leave, documents, assets, payroll preparation, performance reviews, offboarding, reporting, notifications, and auditability.
 
 The system must feel like a polished SaaS product suitable for real SMEs, agencies, institutes, BPOs, software companies, and service businesses.
@@ -208,7 +208,7 @@ A typical hiring flow should support:
 3. Approval is granted or rejected.
 4. Job post is published internally and/or publicly.
 5. Candidate applies through a public candidate experience.
-6. Recruiter screens the application.
+6. HR manager screens the application.
 7. Candidate moves through pipeline stages.
 8. Interview is scheduled.
 9. Interviewer submits scorecard and feedback.
