@@ -491,6 +491,12 @@ Good documentation should cover:
 
 Avoid writing long theory. Keep documentation practical and usable for developers, QA, and product owners.
 
+### Audit Logging Expectations
+
+All authenticated product work must preserve a clear audit trail. Use Spatie activity logs for any create, update, delete, security, access-control, onboarding, document, workflow approval, or sensitive HR action. Log entries must include the actor where available, the subject being changed, a plain-English description, the event name, and safe metadata such as route, IP address, status, or changed non-sensitive fields. Never log passwords, tokens, secrets, recovery codes, raw credentials, payroll secrets, private document contents, or other sensitive values.
+
+Authenticated page views are recorded through the `record.activity` middleware for Inertia/admin/settings screens. New private route groups should include this middleware unless there is a specific privacy or noise reason to exclude them. Future modules must add explicit activity logs for business actions rather than relying only on generic request logging.
+
 ---
 
 ## 17. Pull Request Standards

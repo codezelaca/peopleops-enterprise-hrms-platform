@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AccessController;
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'Welcome')->name('home');
 
-Route::middleware(['auth', 'account.active', 'verified'])->group(function () {
+Route::middleware(['auth', 'account.active', 'verified', 'record.activity'])->group(function () {
     Route::middleware('role:admin')->group(function () {
         Route::get('onboarding/company', [CompanyOnboardingController::class, 'create'])
             ->name('onboarding.company.create');
@@ -24,6 +25,7 @@ Route::middleware(['auth', 'account.active', 'verified'])->group(function () {
         Route::get('company/logo', CompanyLogoController::class)->name('company.logo.show');
 
         Route::get('admin/users', AccessController::class)->name('admin.users.index');
+        Route::get('admin/audit-logs', AuditLogController::class)->name('admin.audit-logs.index');
         Route::post('admin/users', [UserController::class, 'store'])->name('admin.users.store');
         Route::put('admin/users/{user}', [UserController::class, 'update'])->name('admin.users.update');
         Route::delete('admin/users/{user}', [UserController::class, 'destroy'])->name('admin.users.destroy');

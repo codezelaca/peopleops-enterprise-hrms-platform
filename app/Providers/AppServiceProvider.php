@@ -41,6 +41,16 @@ class AppServiceProvider extends ServiceProvider
 
         Event::listen(Login::class, function (Login $event): void {
             $event->user->forceFill(['last_login_at' => now()])->saveQuietly();
+
+            activity()
+                ->performedOn($event->user)
+                ->causedBy($event->user)
+                ->event('login')
+                ->withProperties([
+                    'ip_address' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ])
+                ->log('User logged in');
         });
 
         Password::defaults(function (): Password {

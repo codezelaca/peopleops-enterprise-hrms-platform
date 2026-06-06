@@ -30,6 +30,8 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        $previous = $request->user()->only(['name', 'email']);
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -37,6 +39,16 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
+
+        activity()
+            ->performedOn($request->user())
+            ->causedBy($request->user())
+            ->event('updated')
+            ->withProperties([
+                'old' => $previous,
+                'attributes' => $request->user()->only(['name', 'email']),
+            ])
+            ->log('Profile updated');
 
         Inertia::flash('toast', ['type' => 'success', 'message' => __('Profile updated.')]);
 
@@ -49,6 +61,12 @@ class ProfileController extends Controller
     public function destroy(ProfileDeleteRequest $request): RedirectResponse
     {
         $user = $request->user();
+
+        activity()
+            ->performedOn($user)
+            ->causedBy($user)
+            ->event('deleted')
+            ->log('Own profile deleted');
 
         Auth::logout();
 

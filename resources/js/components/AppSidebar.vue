@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { LayoutGrid, UsersRound } from 'lucide-vue-next';
+import { LayoutGrid, ScrollText, UsersRound } from 'lucide-vue-next';
 import AppLogo from '@/components/AppLogo.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -26,6 +26,11 @@ const mainNavItems: NavItem[] = [
         title: 'Users & Access',
         href: '/admin/users',
         icon: UsersRound,
+    },
+    {
+        title: 'Audit Logs',
+        href: '/admin/audit-logs',
+        icon: ScrollText,
     },
 ];
 </script>

@@ -60,6 +60,12 @@ class PermissionController extends Controller
             return back()->with('error', 'This permission is assigned to roles and cannot be deleted.');
         }
 
+        activity()
+            ->performedOn($permission)
+            ->causedBy(request()->user())
+            ->event('deleted')
+            ->log('Permission deleted by administrator');
+
         $permission->delete();
 
         return back()->with('success', 'Permission deleted.');

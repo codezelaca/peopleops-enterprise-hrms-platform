@@ -14,8 +14,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\Support\LogOptions;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'nic', 'phone', 'job_title', 'password', 'company_id', 'status', 'email_verified_at', 'last_login_at'])]
@@ -23,19 +21,11 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail, PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, LogsActivity, Notifiable, PasskeyAuthenticatable, SoftDeletes, TwoFactorAuthenticatable;
+    use HasFactory, HasRoles, Notifiable, PasskeyAuthenticatable, SoftDeletes, TwoFactorAuthenticatable;
 
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly(['name', 'email', 'nic', 'phone', 'job_title', 'company_id', 'status'])
-            ->logOnlyDirty()
-            ->dontLogEmptyChanges();
     }
 
     /**

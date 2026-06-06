@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\Support\LogOptions;
 
 #[Fillable([
     'uuid',
@@ -40,7 +38,7 @@ use Spatie\Activitylog\Support\LogOptions;
 class Company extends Model
 {
     /** @use HasFactory<CompanyFactory> */
-    use HasFactory, LogsActivity;
+    use HasFactory;
 
     public function setupBy(): BelongsTo
     {
@@ -50,22 +48,6 @@ class Company extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
-    }
-
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logOnly([
-                'name',
-                'legal_name',
-                'industry',
-                'company_size',
-                'timezone',
-                'default_currency',
-                'onboarding_completed_at',
-            ])
-            ->logOnlyDirty()
-            ->dontLogEmptyChanges();
     }
 
     protected function casts(): array

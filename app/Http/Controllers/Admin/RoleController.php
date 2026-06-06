@@ -65,6 +65,12 @@ class RoleController extends Controller
         }
 
         DB::transaction(function () use ($role): void {
+            activity()
+                ->performedOn($role)
+                ->causedBy(auth()->user())
+                ->event('deleted')
+                ->log('Role deleted by administrator');
+
             $role->syncPermissions([]);
             $role->delete();
         });

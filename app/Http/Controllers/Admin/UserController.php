@@ -64,6 +64,9 @@ class UserController extends Controller
         }
 
         DB::transaction(function () use ($admin, $user, $validated): void {
+            $auditedFields = ['name', 'email', 'nic', 'phone', 'job_title', 'status'];
+            $oldAttributes = $user->only($auditedFields);
+            $oldRoles = $user->roles()->pluck('name')->sort()->values()->all();
             $data = Arr::only($validated, ['name', 'email', 'nic', 'phone', 'job_title', 'status']);
 
             if (filled($validated['password'] ?? null)) {
@@ -72,12 +75,34 @@ class UserController extends Controller
 
             $user->update($data);
             $user->syncRoles($validated['roles'] ?? []);
+            $user->refresh();
+
+            $newAttributes = $user->only($auditedFields);
+            $newRoles = $user->roles()->pluck('name')->sort()->values()->all();
+            $changedOld = [];
+            $changedNew = [];
+
+            foreach ($auditedFields as $field) {
+                if (($oldAttributes[$field] ?? null) !== ($newAttributes[$field] ?? null)) {
+                    $changedOld[$field] = $oldAttributes[$field] ?? null;
+                    $changedNew[$field] = $newAttributes[$field] ?? null;
+                }
+            }
+
+            $properties = [
+                'old' => $changedOld,
+                'attributes' => $changedNew,
+            ];
+
+            if ($oldRoles !== $newRoles) {
+                $properties['roles'] = $newRoles;
+            }
 
             activity()
                 ->performedOn($user)
                 ->causedBy($admin)
                 ->event('updated')
-                ->withProperties(['roles' => $validated['roles'] ?? []])
+                ->withProperties($properties)
                 ->log('User account updated by administrator');
         });
 
